@@ -22,15 +22,14 @@ $wc = $_POST["wc"];
 $estacionamiento = $_POST["estacionamiento"];
 $vendedorId = $_POST["vendedor"];
 
-$query = "INSERT INTO propriedades  (titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_id)
+$query = "INSERT INTO propriedades 
+ (titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_id)
 VALUES('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$vendedorId')";
 
 
-try {
-    $resultado = mysqli_query($db, $query);
-} catch (\Throwable $th) {
-    //throw $th;
-}
+
+$resultado = mysqli_query($db, $query);
+
 
 if($resultado){
     echo "Insertado corectamente";
@@ -66,7 +65,7 @@ if($resultado){
        </fieldset>
        <fieldset>
         <legend>Vendedor</legend>
-        <select name="" id="">
+        <select name="vendedorId" id="">
             <option value="1">Gabriel</option>
         <option value="2">Karen</option>
         </select>
