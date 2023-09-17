@@ -6,7 +6,7 @@ incluirTemplate("header");
 ?>
     <main class="contenedor seccion">
         <h1>Adminstrador de bienes raices</h1>
-        <a href="/bienesraicesPHP/admin/propriedades/crear.php" class="boton boton-verde">Crear</a>
+        <a href="/admin/propriedades/crear.php" class="boton boton-verde">Crear</a>
     </main>
 
     <?php

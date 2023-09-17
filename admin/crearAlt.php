@@ -38,28 +38,20 @@ $vendedorId = "";
 
 
 // FI atent cum scri datele
-
-//folosim server pentru a obtine mai detaliate cand folosi var_dump($_FILES, sau $_POST)
 if($_SERVER["REQUEST_METHOD"]=== "POST"){
 
 
     // FI atent cum scri datele
 
 //Insertam in baza de date
-
-//folosim mysqli_real_escape pentr ua face datele mai sigure
-$titulo = mysqli_real_escape_string($db,$_POST["titulo"]);
-$precio = mysqli_real_escape_string($db,$_POST["precio"]);
-$descripcion = mysqli_real_escape_string($db,$_POST["descripcion"]);
-$habitaciones = mysqli_real_escape_string($db,$_POST["habitaciones"]);
-$wc = mysqli_real_escape_string($db,$_POST["wc"]);
-$estacionamiento = mysqli_real_escape_string($db,$_POST["estacionamiento"]);
-$vendedorId = mysqli_real_escape_string($db,$_POST["vendedorId"]);
+$titulo = $_POST["titulo"];
+$precio = $_POST["precio"];
+$descripcion = $_POST["descripcion"];
+$habitaciones = $_POST["habitaciones"];
+$wc = $_POST["wc"];
+$estacionamiento = $_POST["estacionamiento"];
+$vendedorId = $_POST["vendedorId"];
 $creado =date("Y/m/d");
-
-//Salvam destinatia unei imagini intro variabila
-
-$imagen = $_FILES["imagen"];
 
 
 if(!$titulo){
@@ -92,39 +84,15 @@ if(!$precio){
                     $errores[]= "Trebuie sa adauginumele vanzatorului";
                 
                     }
-//asa verificam daca itroducem o imagine(cu var_dump($_FILE) aflam daca are un nume in arrayul imagini)
-//punem imagen error pt ca in caza ca depasete 2 mega mysql o sa ne dea errore
-if (!$imagen["name"]|| $imagen["error"]){
-$errores[]="Trebuie introdusa o imagine";
-}
 
-//Aici validim pentru marime ,sa nu depasesca o anumita marime
-// medida ar fi 100kb ar fi marimea maxima
-$medida = 1000 *100;
 
-if ($imagen["size"] >$medida ){
-    $errores[]="Imaginea este prea mare";
-}
+
+
                     
 //revizam ca nu avem nici o erroare
 
+
 if(empty($errores)){
-//daca nu avem erroare urcam imaginea la servidor
-
-//creem un folder
-
-$carpetaImagenes = "../../imagenes";
-
-if(!is_dir($carpetaImagenes)){
-mkdir($carpetaImagenes);
-}
-
-//Urcam imaginea
-//selectioname numele temporal al variabilei dupa specificam unde
-// vrem sa o salvez iar al treilea parametru este numele
-move_uploaded_file($imagen["tmp_name"],$carpetaImagenes. "/poza1.jpg");
-exit;
-
 $query = "INSERT INTO propriedades 
  (titulo,precio,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_id)
 VALUES('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedorId')";
@@ -150,8 +118,7 @@ if($resultado){
      <div class="alerta error"><?php echo  $error ;?></div>
    
       <?php endforeach ;?>
-      <!-- pentru a adauga fisiere imagini etc adaugam la formular enctype -->
-        <form method="POST" action="/admin/propriedades/crear.php" class="formulario" enctype="multipart/form-data">
+        <form method="POST" action="/admin/propriedades/crear.php" class="formulario">
        <fieldset>
         <legend>Informacion general</legend>
         <label for="titulo">Titulo</label>    
@@ -159,7 +126,7 @@ if($resultado){
         <label for="precio">Precio</label>    
         <input type="number" id="precio" name="precio" value="<?php echo $precio ;?>" placeholder="Precio Propriedad ">
         <label for="imagen">Imagen</label>    
-        <input type="file" id="imagen" name="imagen"  accept="image/jpeg image/png" name="imagen">
+        <input type="file" id="imagen" name="imagen"  accept="image/jpeg image/png">
         <label for="descripcion">Descripcion:</label>
         <textarea name="descripcion" id="descripcion"  cols="30" rows="10"><?php echo $descripcion ;?></textarea>
        </fieldset>
