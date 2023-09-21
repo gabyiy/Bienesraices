@@ -113,28 +113,35 @@ if(empty($errores)){
 
 //creem un folder
 
-$carpetaImagenes = "../../imagenes";
+$carpetaImagenes = "../../imagenes/";
 
 if(!is_dir($carpetaImagenes)){
 mkdir($carpetaImagenes);
 }
 
+//aici generam un nume unic pentru a il da imagini
+
+$nombreImagen =md5(uniqid(rand(),true)) .".jpg";
+
 //Urcam imaginea
-//selectioname numele temporal al variabilei dupa specificam unde
+//selectioname numele temporal al variabilei(pentru a idetifica imaginea) dupa specificam unde
 // vrem sa o salvez iar al treilea parametru este numele
-move_uploaded_file($imagen["tmp_name"],$carpetaImagenes. "/poza1.jpg");
-exit;
+move_uploaded_file($imagen["tmp_name"],$carpetaImagenes. $nombreImagen);
+
+//folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
+// exit;
 
 $query = "INSERT INTO propriedades 
- (titulo,precio,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_id)
-VALUES('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedorId')";
+ (titulo,precio,imagen,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_id)
+VALUES('$titulo','$precio','$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedorId')";
 
 
 $resultado = mysqli_query($db, $query);
-
+ 
 if($resultado){
-    //Daca totu este ok facem un redirect
-    header('Location: /admin');
+    //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
+    //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
+    header('Location: /admin?resultado=1');
 }
 }
 }

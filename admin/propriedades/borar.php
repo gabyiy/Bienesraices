@@ -1,5 +1,12 @@
 <?php
 require "../../includes/funciones.php";
+require "../../includes/config/database.php";
+
+$db = conectarDB();
+
+
+
+
 $inicio=true;
 
 incluirTemplate("header");
