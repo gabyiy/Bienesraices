@@ -7,6 +7,7 @@ $id = $_GET["id"];
 
 $id = filter_var($id,FILTER_VALIDATE_INT);
 
+
 //si daca nu avem un id il redirectionam care admin
 
 if(!$id){
@@ -20,13 +21,17 @@ $db =conectarDB();
 
 //Consultam sa vedem ce vanzatori avem
 
-$consulta = "SELECT * FROM  vendedores where id ={$id}";
+$consulta = "SELECT * FROM  propriedades where id ={$id}" ;
 $resultado = mysqli_query($db,$consulta);
 
-var_dump( $resultado);
 $propriedad = mysqli_fetch_assoc($resultado);
 
-var_dump($propriedad);
+
+//asa putem vedea ce ce rezultat avem la proprietati
+// echo "<pre>";
+// var_dump($propriedad);
+// echo "</pre>";
+
 $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db,$consulta);
 
@@ -40,10 +45,11 @@ $errores=[];
 $titulo = $propriedad["titulo"];
 $precio = $propriedad["precio"];
 $descripcion = $propriedad["descripcion"];
-$habitaciones = $propriedad["descripcion"];
+$habitaciones = $propriedad["habitaciones"];
 $wc = $propriedad["wc"];
 $estacionamiento = $propriedad["estacionamiento"];
 $vendedorId = $propriedad["vendedores_id"];
+$imagenPropriedad = $propriedad["imagen"];
 
 
 
@@ -102,11 +108,6 @@ if(!$precio){
                     $errores[]= "Trebuie sa adauginumele vanzatorului";
                 
                     }
-//asa verificam daca itroducem o imagine(cu var_dump($_FILE) aflam daca are un nume in arrayul imagini)
-//punem imagen error pt ca in caza ca depasete 2 mega mysql o sa ne dea errore
-if (!$imagen["name"]|| $imagen["error"]){
-$errores[]="Trebuie introdusa o imagine";
-}
 
 //Aici validim pentru marime ,sa nu depasesca o anumita marime
 // medida ar fi 100kb ar fi marimea maxima
@@ -129,29 +130,43 @@ if(!is_dir($carpetaImagenes)){
 mkdir($carpetaImagenes);
 }
 
-//aici generam un nume unic pentru a il da imagini
+//asta o sa il folosim mai incolo in cazaca nu am adaugat o imagine
+$nombreImagen="";
 
+if($imagen["name"]){
+//Elminam imaginea existenta pentru a o actualiza cu cea noua
+
+
+unlink($carpetaImagenes . $propriedad['imagen']);
+
+//aici generam un nume unic pentru a il da imagini
 $nombreImagen =md5(uniqid(rand(),true)) .".jpg";
 
 //Urcam imaginea
 //selectioname numele temporal al variabilei(pentru a idetifica imaginea) dupa specificam unde
 // vrem sa o salvez iar al treilea parametru este numele
 move_uploaded_file($imagen["tmp_name"],$carpetaImagenes. $nombreImagen);
-
+}else{
+    //aici spunem ca numele imagini sa raman ce aveam salvat la propiedad imagine 
+    //sa nu se schimbe si nici sa se stearga
+    $nombreImagen = $propriedad["imagen"];
+}
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
 // exit;
 
-$query = "INSERT INTO propriedades 
- (titulo,precio,imagen,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_id)
-VALUES('$titulo','$precio','$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedorId')";
+//punem '' doar unde avem string unde avem int lasa doar variabila
+//este bine sa comprobam upatu in tableplus
+$query = "UPDATE propriedades SET titulo = '{$titulo}',precio = {$precio},imagen = '{$nombreImagen}',descripcion = '{$descripcion}',
+habitaciones = {$habitaciones}, wc = {$wc},estacionamiento = {$estacionamiento},vendedores_id ={$vendedorId} WHERE id={$id}";
 
 
 $resultado = mysqli_query($db, $query);
  
+
 if($resultado){
     //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
     //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
-    header('Location: /admin?resultado=1');
+    header('Location: /admin?resultado=2');
 }
 }
 }
@@ -168,7 +183,9 @@ if($resultado){
    
       <?php endforeach ;?>
       <!-- pentru a adauga fisiere imagini etc adaugam la formular enctype -->
-        <form method="POST" action="/admin/propriedades/crear.php" class="formulario" enctype="multipart/form-data">
+
+      <!-- pentru a trimite datel de la form direct in pagina unde ne aflam scoate action -->
+        <form method="POST" class="formulario" enctype="multipart/form-data">
        <fieldset>
         <legend>Informacion general</legend>
         <label for="titulo">Titulo</label>    
@@ -177,6 +194,7 @@ if($resultado){
         <input type="number" id="precio" name="precio" value="<?php echo $precio ;?>" placeholder="Precio Propriedad ">
         <label for="imagen">Imagen</label>    
         <input type="file" id="imagen" name="imagen"  accept="image/jpeg image/png" name="imagen">
+        <img src="/imagenes/<?php echo $imagenPropriedad?>" class="imagen-small" alt="">
         <label for="descripcion">Descripcion:</label>
         <textarea name="descripcion" id="descripcion"  cols="30" rows="10"><?php echo $descripcion ;?></textarea>
        </fieldset>

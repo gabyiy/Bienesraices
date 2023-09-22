@@ -29,10 +29,12 @@ incluirTemplate("header");
         <?php if(intval( $resultado)===1):?>
 
             <p class="alerta exito">Ai introdus datele corect</p>
-            <?php endif;?>
-       
-
+        <!-- sau daca primim 2 la resultat din actualizar sa ne scrie ca este o actualizare        -->
+<?php elseif(intval($resultado)===2): ?>
     
+    <p class="alerta exito">Ai modificat datele corect</p>
+
+    <?php endif; ?>
         <a href="/admin/propriedades/crear.php" class="boton boton-verde">Crear</a>
         <table class="propiedades">
         <thead>
