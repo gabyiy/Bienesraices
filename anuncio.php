@@ -1,16 +1,36 @@
 <?php
 require "includes/funciones.php";
+
+
+require  "includes/config/database.php";
+$db = conectarDB();
+$id = $_GET["id"];
+
+$id =filter_var($id,FILTER_VALIDATE_INT);
+
+$query = "SELECT * FROM propriedades WHERE id = {$id}";
+
+$resultado = mysqli_query($db,$query);
+
+//asa specifacam daca nu resultado este mai mare decat rows (adica nu avem nici un row sa ne trimita la home)
+if (!$resultado ->num_rows){
+    header('Location : /');
+}
+
+
+$proprieda = mysqli_fetch_assoc($resultado);
+
+
 $inicio=true;
 
 incluirTemplate("header");
 ?>
     <main class="contenedor seccion contenido-centrado">
-        <h1>Casa en Venta frente al bosque</h1>
-
+        <h1><?php echo $proprieda['titulo'] ?></h1>
         <picture>
             <source srcset="build/img/destacada.webp" type="image/webp">
             <source srcset="build/img/destacada.jpg" type="image/jpeg">
-            <img loading="lazy" src="build/img/destacada.jpg" alt="imagen de la propiedad">
+            <img loading="lazy" src="/imagenes/<?php echo $proprieda['imagen'] ?>" alt="imagen de la propiedad">
         </picture>
 
         <div class="resumen-propiedad">
