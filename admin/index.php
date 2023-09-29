@@ -3,6 +3,15 @@
 
 require "../includes/funciones.php";
 require '../includes/config/database.php';
+
+
+//utilizam functia pentru a vedea daca este autentificat ,daca nu il redirectionam catre index
+$auth = estaAuteticado();
+
+if(!$auth){
+    header("Location :/");
+}
+
 //importam conexiunea 
 $db = conectarDB();
 

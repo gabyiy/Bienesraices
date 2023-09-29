@@ -44,12 +44,27 @@ $resultado = mysqli_query($db , $query);
         //Aici verificam daca passwordul este corect
         $usuario = mysqli_fetch_assoc($resultado);
 
-        $query = "SELECT password FROM usuarios WHERE email=$usuario['email']";
-        $resultado = mysqli_query($db,$query);
-        if($password !== $resultado){
-            $errores[]="Passwordul nu coincide";
+
+        //Pentru a verifica parolo folosim pasword verify
+
+        $auth = password_verify($password,$usuario['password']);
+
+        if($auth){
+                //paswordul userul este ok si salvam userul cu session
+                //daca totu este ok se salveaza ca este logat
+                session_start();
+
+                $_SESSION['usuario']=$usuario['email'];
+                $_SESSION['login']=true;
+
+              
+
+
+
+        }else{
+            $errores[]= "Passwordul nu este corect";
         }
-        
+
     }else{
 
         $errores[]= "Emailu nu exista";

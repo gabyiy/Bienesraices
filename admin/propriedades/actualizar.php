@@ -1,5 +1,11 @@
 <?php
+require "../../includes/funciones.php";
 
+$auth = estaAuteticado();
+
+if(!$auth){
+header("Lication : /");
+}
 
 //Aici scoatem id pe care il primim din index.php 
 $id = $_GET["id"];
@@ -35,7 +41,6 @@ $propriedad = mysqli_fetch_assoc($resultado);
 $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db,$consulta);
 
-require "../../includes/funciones.php";
 $inicio=true;
 
 incluirTemplate("header");
