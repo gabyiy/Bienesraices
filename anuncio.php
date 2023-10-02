@@ -1,8 +1,7 @@
 <?php
-require "includes/funciones.php";
+require "includes/app.php";
 
 
-require  "includes/config/database.php";
 $db = conectarDB();
 $id = $_GET["id"];
 

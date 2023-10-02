@@ -1,8 +1,7 @@
 <?php
 
 
-require "../includes/funciones.php";
-require '../includes/config/database.php';
+require '../../includes/app.php';
 
 
 //utilizam functia pentru a vedea daca este autentificat ,daca nu il redirectionam catre index

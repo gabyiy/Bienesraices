@@ -7,7 +7,7 @@ $inicio = true;
 //ca sa ne arate headeru
 
 
-require "includes/funciones.php";
+require 'includes/app.php';
 
 incluirTemplate("header",$inicio);
 ?>
