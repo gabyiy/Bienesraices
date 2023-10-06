@@ -16,7 +16,7 @@ include TEMPLATES_URL . "/$nombre.php";
 
 
 //functia asta o folosim pentru a autetifca userul si ne va retuna un bool
-function estaAuteticado() : bool{
+function estaAuteticado() {
 
     //initiem sesiunea pentr ua avea acces la variabliele salvate in sesion
 
@@ -25,13 +25,22 @@ session_start();
 
 //facem o verificare
 
-$auth = $_SESSION['login'];
 
 
-if($auth){
-return true;
-}else{
-    return false;
+
+if($_SESSION['login']){
+    header("Location: /admin");
 }
 
+}
+
+
+//asta este o functie pe care o vom folosim ca scorcut de var_dump
+
+function debug ($input){
+
+echo "<pre>";
+var_dump($input);
+echo "</pre>";
+exit;
 }

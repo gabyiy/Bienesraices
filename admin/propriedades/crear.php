@@ -1,13 +1,21 @@
 <?php
 //base de datos
 
-require "../../includes/config/database.php";
-$db =conectarDB();
+require "../../includes/app.php";
+
+
+//acum avand acces la app.php putem utiliza si clasa app
+use App\Propriedad;
+
+//iar aici folosim functia care verifica daca userul este autetificat
+ estaAuteticado();
+
+
+ $db = conectarDB();
 
 //Consultam sa vedem ce vanzatori avem
 
 $consulta = "SELECT * FROM  vendedores";
-
 
 $resultado = mysqli_query($db,$consulta);
 
@@ -20,7 +28,6 @@ $resultado = mysqli_query($db,$consulta);
 //     echo "sau sters";
 // }
 
-require "../../includes/funciones.php";
 $inicio=true;
 
 incluirTemplate("header");

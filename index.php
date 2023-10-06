@@ -1,5 +1,6 @@
 <!-- Ca SA ne recunoasca index.php trebuie sa bagam asta in apache config httpd     DirectoryIndex index.php in dir module -->
-
+<!-- Trebuie sa instalam si gulp (uitate la video despre gulp de instalare), composer(uitate la vid despre composer si mare grija ca 
+trebuie schimbat in composer json autoloaderu si dupa composer update) -->
 <?php
 
 $inicio = true;

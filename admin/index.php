@@ -1,15 +1,14 @@
 <?php
 
 
-require '../../includes/app.php';
+require '../includes/app.php';
 
 
 //utilizam functia pentru a vedea daca este autentificat ,daca nu il redirectionam catre index
-$auth = estaAuteticado();
+//folosim acelasi sistem pentru a proteja actualizar.php si creaer (practic doar daca este autetificat poate vedea paginile
+//altfel va fi redirectionat catre ruta home)
+ estaAuteticado();
 
-if(!$auth){
-    header("Location :/");
-}
 
 //importam conexiunea 
 $db = conectarDB();

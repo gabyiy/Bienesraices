@@ -1,10 +1,10 @@
 <?php
-require "../../includes/funciones.php";
+require "../../includes/app.php";
 
 $auth = estaAuteticado();
 
-if(!$auth){
-header("Lication : /");
+if (!$auth){
+    header("Location : /");
 }
 
 //Aici scoatem id pe care il primim din index.php 
@@ -22,7 +22,6 @@ header("Location: /admin");
 
 //base de datos
 
-require "../../includes/config/database.php";
 $db =conectarDB();
 
 //Consultam sa vedem ce vanzatori avem

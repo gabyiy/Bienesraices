@@ -51,13 +51,16 @@ $resultado = mysqli_query($db , $query);
         if($auth){
                 //paswordul userul este ok si salvam userul cu session
                 //daca totu este ok se salveaza ca este logat
+                //iar dupa in admin/index.php o sa avem acces sa vedem datele de acolo 
+                //altfel un undex.php o sa ne redirectionez in alta parte
                 session_start();
 
                 $_SESSION['usuario']=$usuario['email'];
                 $_SESSION['login']=true;
 
-              
 
+                
+              header("Location: /admin");
 
 
         }else{
