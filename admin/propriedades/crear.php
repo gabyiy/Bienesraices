@@ -28,9 +28,7 @@ $resultado = mysqli_query($db,$consulta);
 //     echo "sau sters";
 // }
 
-$inicio=true;
 
-incluirTemplate("header");
 $errores=[];
 
 
@@ -152,6 +150,11 @@ if($resultado){
 }
 }
 }
+
+$inicio=true;
+
+incluirTemplate("header");
+
 ?>
    <main class="contenedor seccion">
         <h1>Crear</h1>

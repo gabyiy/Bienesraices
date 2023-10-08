@@ -1,11 +1,8 @@
 <?php
 require "../../includes/app.php";
 
-$auth = estaAuteticado();
+estaAuteticado();
 
-if (!$auth){
-    header("Location : /");
-}
 
 //Aici scoatem id pe care il primim din index.php 
 $id = $_GET["id"];
