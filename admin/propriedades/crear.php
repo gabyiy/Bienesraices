@@ -30,7 +30,7 @@ $resultado = mysqli_query($db,$consulta);
 
 $inicio=true;
 
-incluirTemplate("header");
+// incluirTemplate("header");
 $errores=[];
 
 
@@ -48,6 +48,14 @@ $vendedorId = "";
 
 //folosim server pentru a obtine mai detaliate cand folosi var_dump($_FILES, sau $_POST)
 if($_SERVER["REQUEST_METHOD"]=== "POST"){
+
+//instantiem clasa Prorieda , si ii trecem ca parametru POST
+$propriedad = new Propriedad($_POST);
+
+
+//aici folosim o functie ca sa salvam de tot ce avem in proriedad(cu ajutorul metodului din clasa Propriedad) 
+//pentru ca avem acces la ea ca deja am instantiato
+$propriedad -> guardar();
 
 
     // FI atent cum scri datele
