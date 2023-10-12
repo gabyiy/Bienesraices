@@ -32,7 +32,7 @@ $resultado = mysqli_query($db,$consulta);
 // }
 
 
-// incluirTemplate("header");
+incluirTemplate("header");
 
 //aici accesam clasa proprieda pentru a avea acces la errores, nu e nevoie sa instantiem cu new fiind protected
 $errores = Propriedad::getErrores();

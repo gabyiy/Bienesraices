@@ -8,7 +8,6 @@ if(!isset($_SESSION)){
 session_start();
 
 }
-include "../../includes/app.php";
 
 //iar aici salvam in auth userul daca este logat o sa avem true altfel o sa fie false
 $auth = $_SESSION["login"]?? false;
