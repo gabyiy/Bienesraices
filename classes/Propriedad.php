@@ -2,6 +2,8 @@
 
 namespace App;
 
+use mysqli;
+
 class Propriedad{
 //Variabila bazei de date care o facem protected ca sa fie accesibila doar din clasa, si static ca sa fie instantiat doar odata
    protected static $db;

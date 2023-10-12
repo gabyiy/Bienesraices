@@ -11,6 +11,7 @@ require __DIR__ . "/../vendor/autoload.php";
 //Conexiunea la baza de date
 $db =conectarDB();
 
+$db = conectarDB();
 use App\Propriedad;
 
 

@@ -29,6 +29,7 @@ $resultado = mysqli_query($db,$consulta);
 // }
 
 
+// incluirTemplate("header");
 $errores=[];
 
 
