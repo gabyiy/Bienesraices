@@ -7,6 +7,9 @@ require "../../includes/app.php";
 //acum avand acces la app.php putem utiliza si clasa app
 use App\Propriedad;
 
+//intervention o folosim ca sa adaugam imagini
+use Intervention\Image\ImageManagerStatic as Image;
+
 //iar aici folosim functia care verifica daca userul este autetificat
  estaAuteticado();
 
@@ -30,7 +33,9 @@ $resultado = mysqli_query($db,$consulta);
 
 
 // incluirTemplate("header");
-$errores=[];
+
+//aici accesam clasa proprieda pentru a avea acces la errores, nu e nevoie sa instantiem cu new fiind protected
+$errores = Propriedad::getErrores();
 
 
 $titulo = "";
@@ -53,105 +58,56 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
     $propridad = new Propriedad($_POST);
 
 
-//acesam functia guardar care o sa ne adauge proprietatea de forma automata
-$propridad->guardar();
+//creem un folder pentru imagini
 
-
-    // FI atent cum scri datele
-
-//Insertam in baza de date
-
-//folosim mysqli_real_escape pentr ua face datele mai sigure
-$titulo = mysqli_real_escape_string($db,$_POST["titulo"]);
-$precio = mysqli_real_escape_string($db,$_POST["precio"]);
-$descripcion = mysqli_real_escape_string($db,$_POST["descripcion"]);
-$habitaciones = mysqli_real_escape_string($db,$_POST["habitaciones"]);
-$wc = mysqli_real_escape_string($db,$_POST["wc"]);
-$estacionamiento = mysqli_real_escape_string($db,$_POST["estacionamiento"]);
-$vendedorId = mysqli_real_escape_string($db,$_POST["vendedorId"]);
-$creado =date("Y/m/d");
-
-//Salvam destinatia unei imagini intro variabila
-
-$imagen = $_FILES["imagen"];
-
-
-if(!$titulo){
-$errores[]= "Trebuie sa adaugi un titlu";
-
-}
-
-if(!$precio){
-    $errores[]= "Trebuie sa adaugi un pret";
-
-    }
-    if(strlen( $descripcion)<40){
-        $errores[]= "Trebuie sa adaugi o descriptie si trebuie sa fie mai mare de 50 caractere";
-    
-        }
-
-    if(!$habitaciones){
-        $errores[]= "Trebuie sa adaugi un numar de camere";
-    
-        }
-        if(!$wc){
-            $errores[]= "Trebuie sa adaugi un numar de toalete";
-        
-            }
-            if(!$estacionamiento){
-                $errores[]= "Trebuie sa adaugi un numar de parcari";
-            
-                }
-                if(!$vendedorId){
-                    $errores[]= "Trebuie sa adauginumele vanzatorului";
-                
-                    }
-//asa verificam daca itroducem o imagine(cu var_dump($_FILE) aflam daca are un nume in arrayul imagini)
-//punem imagen error pt ca in caza ca depasete 2 mega mysql o sa ne dea errore
-if (!$imagen["name"]|| $imagen["error"]){
-$errores[]="Trebuie introdusa o imagine";
-}
-
-//Aici validim pentru marime ,sa nu depasesca o anumita marime
-// medida ar fi 100kb ar fi marimea maxima
-$medida = 1000 *100;
-
-if ($imagen["size"] >$medida ){
-    $errores[]="Imaginea este prea mare";
-}
-                    
-//revizam ca nu avem nici o erroare
-
-if(empty($errores)){
-//daca nu avem erroare urcam imaginea la servidor
-
-//creem un folder
-
-$carpetaImagenes = "../../imagenes/";
-
-if(!is_dir($carpetaImagenes)){
-mkdir($carpetaImagenes);
-}
 
 //aici generam un nume unic pentru a il da imagini
 
-$nombreImagen =md5(uniqid(rand(),true)) .".jpg";
+$nombreImagen =md5(uniqid(rand(),true)) . ".jpg";
 
-//Urcam imaginea
-//selectioname numele temporal al variabilei(pentru a idetifica imaginea) dupa specificam unde
-// vrem sa o salvez iar al treilea parametru este numele
-move_uploaded_file($imagen["tmp_name"],$carpetaImagenes. $nombreImagen);
+
+
+//Urcam imaginea si ii face un resize cu intervention  
+//imaginea o aducem cum superglobala $_files  iar ca primu parametru punem de unde o luam adica unde are numele image
+//iar al doilea parametru este numele temporal
+//iar dupa utilizam functia predefinita fit care face ca imaginea sa nu depasesca o anumita capacitate de ex 500 kb
+//si ca parametru spunem ca vrea sa aibee 800 px inaltime cu 600 latime
+if ($_FILES['imagen']['tmp_name']){
+$image =  Image::make($_FILES['imagen']['tmp_name'])->fit(800,600);
+//iar aici folosim functia creata in propriedades pentru a trimite imaginea ca parametru care este nombreimagen
+
+$propriedad->setImagen($nombreImagen);
+
+}
+
+//aici utilizam metoda  validar
+$errores= $propridad->validar();
+
+//revizam ca nu avem nici o erroare
+
+if(empty($errores)){
+    //daca nu avem erroare urcam imaginea la servidor
+    
+    //acesam functia guardar care o sa ne adauge proprietatea de forma automata
+    
+
+// si aici aspunem ca daca ne este creat folderul din funciones ca sa il creeze
+if (!is_dir(CARPETA_IMAGENES)){
+    mkdir(CARPETA_IMAGENES);
+}
+
+//Salvam destinatia unei imagini intro variabila
+
+//Salvam imaginea in server
+$image->save(CARPETA_IMAGENES . $nombreImagen);
 
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
 // exit;
 
-$query = "INSERT INTO propriedades 
- (titulo,precio,imagen,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_id)
-VALUES('$titulo','$precio','$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedorId')";
+//Salvam imaginea in baza de date
+$resultado=$propridad->guardar();
 
-
-$resultado = mysqli_query($db, $query);
- 
+//Mesaj de succes sau fail
 if($resultado){
     //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
     //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr

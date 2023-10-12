@@ -8,6 +8,10 @@
 define("TEMPLATES_URL",__DIR__ ."/templates");
 
 define("FUNCIONES_URL", __DIR__."funciones.php");
+define('CARPETA_IMAGENES', __DIR__ . '/../imagenes/');
+
+
+
 //iar cand utilizam functia asta aducem headeru unde vrem
 //iar ca al doilea parametru punem inicio ,care daca nu e prezent sa fie false pe default
 function incluirTemplate ($nombre,$inicio=false){
