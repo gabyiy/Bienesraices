@@ -8,7 +8,11 @@ require "funciones.php";
 require "config/database.php";
 require __DIR__ . "/../vendor/autoload.php";
 
+//Conexiunea la baza de date
+$db =conectarDB();
 
 use App\Propriedad;
 
-$propriedad = new Propriedad;
+
+//Fiind o functie statica nu trebuie instantiata, iar dupa ii trecem ca parametru conexiunea
+Propriedad::setDB($db);

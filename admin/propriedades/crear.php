@@ -47,6 +47,14 @@ $vendedorId = "";
 //folosim server pentru a obtine mai detaliate cand folosi var_dump($_FILES, sau $_POST)
 if($_SERVER["REQUEST_METHOD"]=== "POST"){
 
+    //instantiem clasa propriedad pentru a avea acces la functiile ei
+    //si in acelasi timp le trecem si parametru post
+    $propridad = new Propriedad($_POST);
+
+
+//acesam functia guardar care o sa ne adauge proprietatea de forma automata
+$propridad->guardar();
+
 
     // FI atent cum scri datele
 
@@ -153,7 +161,6 @@ if($resultado){
 
 $inicio=true;
 
-incluirTemplate("header");
 
 ?>
    <main class="contenedor seccion">
