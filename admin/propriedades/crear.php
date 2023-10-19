@@ -55,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
 
     //instantiem clasa propriedad pentru a avea acces la functiile ei
     //si in acelasi timp le trecem si parametru post
-    $propridad = new Propriedad($_POST);
+    $propriedad = new Propriedad($_POST);
 
 
 //creem un folder pentru imagini
@@ -75,13 +75,12 @@ $nombreImagen =md5(uniqid(rand(),true)) . ".jpg";
 if ($_FILES['imagen']['tmp_name']){
 $image =  Image::make($_FILES['imagen']['tmp_name'])->fit(800,600);
 //iar aici folosim functia creata in propriedades pentru a trimite imaginea ca parametru care este nombreimagen
-
 $propriedad->setImagen($nombreImagen);
 
 }
 
 //aici utilizam metoda  validar
-$errores= $propridad->validar();
+$errores= $propriedad->validar();
 
 //revizam ca nu avem nici o erroare
 
@@ -105,7 +104,7 @@ $image->save(CARPETA_IMAGENES . $nombreImagen);
 // exit;
 
 //Salvam imaginea in baza de date
-$resultado=$propridad->guardar();
+$resultado=$propriedad->guardar();
 
 //Mesaj de succes sau fail
 if($resultado){

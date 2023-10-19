@@ -115,6 +115,7 @@ if ($imagen ){
 
    $this->imagen = $imagen;
 }
+
 }
 
 //Validare
