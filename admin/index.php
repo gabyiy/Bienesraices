@@ -9,9 +9,12 @@ require '../includes/app.php';
 //altfel va fi redirectionat catre ruta home)
  estaAuteticado();
 
+use App\Propriedad;
 
-//importam conexiunea 
-$db = conectarDB();
+
+//Implementam  o metododa pentru a extrage toate proprietatile utilizand active record
+
+$propriedades = Propriedad::all();
 
 //scriem queryul
 $query = "SELECT * from propriedades";
@@ -86,30 +89,30 @@ incluirTemplate("header");
         </tr>
 
         </thead>
-        <!-- Monstram datele -->
+        <!-- Monstram datele care sunt salvate intru obict( de asta folosim foreach)-->
         <tbody>
-            <?php while(  $proprieda  = mysqli_fetch_assoc($resultadoConsulta)): ?>
+            <?php foreach($propriedades as $propriedad): ?>
 
             <tr>
-                <td><?php echo $proprieda["id"] ?></td>
-                <td><?php echo $proprieda["titulo"] ?></td>
-                <td><img src="../imagenes/<?php echo  $proprieda["imagen"]?>" class="imagen-tabla" alt=""></td>
-                <td><?php echo $proprieda["precio"] ?></td>
+                <td><?php echo $propriedad->id;?></td>
+                <td><?php echo $propriedad->titulo; ?></td>
+                <td><img src="../imagenes/<?php echo  $propriedad->imagen;?>" class="imagen-tabla" alt=""></td>
+                <td><?php echo $propriedad->precio;?></td>
                 <td>
                     <form action="" method="POST" class="w-100">
 
                     <!-- aici folosim un input cu id proprietati pe care dorim sa o eliminam
                  folosim type hidden ca sa ne ascunda input si sa nu apara valoarea -->
-                <input type="hidden" name="id" value="<?php  echo $proprieda['id'];?>">
+                <input type="hidden" name="id" value="<?php  echo $propriedad->id;?>">
                     <input type="submit" class="boton-rojo-block" value="Eliminar">
 
             </form>
 
                     <!-- Asa specificam la proprieda vrem sa merge ca sa actualizam trecandui idul -->
-                    <a href="/admin/propriedades//actualizar.php?id=<?php echo $proprieda["id"]; ?>" class="boton-amarillo-block">Actualizar</a>
+                    <a href="/admin/propriedades//actualizar.php?id=<?php echo $propriedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
         </td>
             </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
 
         </tbody>
         </table>

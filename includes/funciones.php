@@ -48,3 +48,12 @@ var_dump($input);
 echo "</pre>";
 exit;
 }
+
+
+//Escape sanitize  HTML
+
+function s ($html):string{
+
+$s =htmlspecialchars($html);
+return $s;
+}

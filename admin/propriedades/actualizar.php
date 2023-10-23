@@ -1,4 +1,7 @@
 <?php
+
+use App\Propriedad;
+
 require "../../includes/app.php";
 
 estaAuteticado();
@@ -17,16 +20,8 @@ if(!$id){
 header("Location: /admin");
 }
 
-//base de datos
-
-$db =conectarDB();
-
-//Consultam sa vedem ce vanzatori avem
-
-$consulta = "SELECT * FROM  propriedades where id ={$id}" ;
-$resultado = mysqli_query($db,$consulta);
-
-$propriedad = mysqli_fetch_assoc($resultado);
+//Instatiem clasa PRoprieda cu functia statica
+$propriedad = Propriedad::find($id);
 
 
 //asa putem vedea ce ce rezultat avem la proprietati
@@ -43,14 +38,14 @@ incluirTemplate("header");
 $errores=[];
 
 //Iar asa putem sa le trecem ca date ce avem salvat in propriedad
-$titulo = $propriedad["titulo"];
-$precio = $propriedad["precio"];
-$descripcion = $propriedad["descripcion"];
-$habitaciones = $propriedad["habitaciones"];
-$wc = $propriedad["wc"];
-$estacionamiento = $propriedad["estacionamiento"];
-$vendedorId = $propriedad["vendedores_id"];
-$imagenPropriedad = $propriedad["imagen"];
+$titulo = $propriedad->titulo;
+$precio = $propriedad->precio;
+$descripcion = $propriedad->descripcion;
+$habitaciones = $propriedad->habitaciones;
+$wc = $propriedad->wc;
+$estacionamiento = $propriedad->estacionamiento;
+$vendedorId = $propriedad->vendedores_id;
+$imagenPropriedad = $propriedad->imagen;
 
 
 
@@ -187,42 +182,7 @@ if($resultado){
 
       <!-- pentru a trimite datel de la form direct in pagina unde ne aflam scoate action -->
         <form method="POST" class="formulario" enctype="multipart/form-data">
-       <fieldset>
-        <legend>Informacion general</legend>
-        <label for="titulo">Titulo</label>    
-        <input type="text" id="titulo" name="titulo" value="<?php echo $titulo; ?>" placeholder="Titulo de la propriedad">
-        <label for="precio">Precio</label>    
-        <input type="number" id="precio" name="precio" value="<?php echo $precio ;?>" placeholder="Precio Propriedad ">
-        <label for="imagen">Imagen</label>    
-        <input type="file" id="imagen" name="imagen"  accept="image/jpeg image/png" name="imagen">
-        <img src="/imagenes/<?php echo $imagenPropriedad?>" class="imagen-small" alt="">
-        <label for="descripcion">Descripcion:</label>
-        <textarea name="descripcion" id="descripcion"  cols="30" rows="10"><?php echo $descripcion ;?></textarea>
-       </fieldset>
-       <fieldset>
-        <legend>Informacion de la propriedad</legend>
-        <label for="habitaciones">Habitaciones</label>    
-        <input type="number" id="habitaciones" name="habitaciones" value="<?php echo $habitaciones ;?>" placeholder="Ex: 3"  min="1" max="9">
-        <label for="wc">Banos</label>    
-        <input type="number" name="wc" id="wc" value="<?php echo $wc ?>" placeholder="Ex: 1" min="1" max="9">
-        <label for="estacionamiento">Estacionamiento</label>    
-        <input type="number" id="estacionamiento" name="estacionamiento"value="<?php echo $estacionamiento; ?>" placeholder="Ex: 1" min="1" max="9">
-       </fieldset>
-       <fieldset>
-        <legend>Vendedor</legend>
-        <select name="vendedorId" id="">
-            <option value="">--Selecione--</option>
-
-            <!-- Si aici verificam daca am vrun vendedor (practic ii facem un map-->
-            <?php while($row= mysqli_fetch_assoc($resultado) ): ?>
-                <!-- iar mai jos spunem daca venderou id este lafel ca cel din baza de date sa ne adauge selected alftel nimic -->
-                <option <?php echo $vendedorId ===$row['id']? 'selected':'' ;?> value="<?php echo $row['id']; ?>">
-                        <?php echo $row['nombre']. " ". $row['apellido'];?>
-                </option>
-            <?php endwhile ; ?>
-         
-        </select>
-       </fieldset>
+     <?php include "../../includes/templates/formulario_propriedades.php"?>
        <input type="submit" value="Actualiar Propriedad" class="boton boton-verde">
         </form>
     </main>

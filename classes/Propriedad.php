@@ -165,5 +165,72 @@ public function validar(){
       }
       return self::$errores;
 }
+
+//Listeaza toate proprietatilie
+//facem o functie dinamica care poate primi diferite consulte
+
+//si functile care urmeaza fac urmatoarele (transforma dintru array intrun obiect ,pentru ca asa functioneaza active record)
+public static function all (){
+ 
+$query ="SELECT  * FROM propriedades";
+
+ $resultado =self::consultarSQL($query);
+
+ return $resultado;
+
+
+}
+
+//Cauta o proprietate in functie de id
+public static function find($id){
+   //Consultam sa vedem ce vanzatori avem , si utilizam aceaeasi functi consultarSql pentru a transforma rezultatu in obiect
+
+$query = "SELECT * FROM  propriedades where id ={$id}" ;
+
+$resultado =self::consultarSQL($query);
+
+//cu array shift spunem ca vrem sa ne arate doar prima pozitie a arraiului
+return array_shift($resultado);
+}
+
+
+
+public static function consultarSQL($query){
+
+   //Consultam baza de date
+$resultado = self::$db->query($query);
+
+   //Iteram rezultatele
+$array=[];
+
+while ($registro = $resultado->fetch_assoc()){
+   
+   $array[]=self::crearObjeto($registro);
+}
+
+   //Eliberam memoria
+
+$resultado->free();
+   //returnam rezultatul
+
+   return $array;
+
+}
+
+protected static function crearObjeto ($registro){
+
+   $objeto = new self;
+
+
+   foreach($registro as $key =>$value){
+
+      if(property_exists($objeto,$key)){
+         $objeto->$key=$value;
+      }
+   }
+
+   return $objeto;
+}
+
 }
 ?>
