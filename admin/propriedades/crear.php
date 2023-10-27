@@ -47,8 +47,8 @@ $errores = Propriedad::getErrores();
 if($_SERVER["REQUEST_METHOD"]=== "POST"){
 
     //instantiem clasa propriedad pentru a avea acces la functiile ei
-    //si in acelasi timp le trecem si parametru post
-    $propriedad = new Propriedad($_POST);
+    //si in acelasi timp le trecem si parametru post cu ce primim din arrayul propriedad din formular
+    $propriedad = new Propriedad($_POST['propriedad']);
 
 
 //creem un folder pentru imagini
@@ -65,8 +65,8 @@ $nombreImagen =md5(uniqid(rand(),true)) . ".jpg";
 //iar al doilea parametru este numele temporal
 //iar dupa utilizam functia predefinita fit care face ca imaginea sa nu depasesca o anumita capacitate de ex 500 kb
 //si ca parametru spunem ca vrea sa aibee 800 px inaltime cu 600 latime
-if ($_FILES['imagen']['tmp_name']){
-$image =  Image::make($_FILES['imagen']['tmp_name'])->fit(800,600);
+if ($_FILES['propriedad']['tmp_name']['imagen']){
+$image =  Image::make($_FILES['propriedad']['tmp_name']['imagen'])->fit(800,600);
 //iar aici folosim functia creata in propriedades pentru a trimite imaginea ca parametru care este nombreimagen
 $propriedad->setImagen($nombreImagen);
 

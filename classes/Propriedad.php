@@ -51,7 +51,7 @@ protected static $errores=[];
         $this -> estacionamiento= $args["estacionamiento"]??'';
         //facem asta ca sa isi ia data de forma automata
         $this -> creado = date("Y/m/d")??'';
-        $this ->vendedores_id = $args["vendedorId"]??'';
+        $this ->vendedores_id = $args["vendedorId"]??1;
      }
 
      public function guardar(){
@@ -109,6 +109,8 @@ return $sanitzando;
 }
 //Urcare de archive , in cazul nostru imaginea
 public function setImagen($imagen){
+//Elimina imaginea anterioARE
+
    //si aici spunem daca avem o imagine trimisa prin parametru sa o salvam in variabila nostra  imagen din clasa
 
 if ($imagen ){
@@ -232,5 +234,21 @@ protected static function crearObjeto ($registro){
    return $objeto;
 }
 
+
+
+//sincronizeaza schimbarile din memorie cu cea ce adauga userul (se utilizeaza pentru actualizare)
+//o sa primeasca ca parametru un array gol
+public function sincronizar($args =[]){
+
+   //iar cu foreach actualizam datele , si dupa folsoim if sa vedem daca exista proprietate
+   //referindune la cea deja salvata in memorie adica in constructor, si in caz ca se actualizeaza
+   //adica o sa primim prin arrayul din argument noi date o sa le schimbam pe cele vechi
+   //iar daca este null sa ii trecem valoare care exista deja
+   foreach($args as $key =>$value){
+      if(property_exists($this, $key)&& !is_null($value)){
+         $this->$key = $value;
+      }
+   }
+}
 }
 ?>
