@@ -65,10 +65,10 @@ if ($_FILES['propriedad']['tmp_name']['imagen']){
     $propriedad->setImagen($nombreImagen);
     
     }
+
 if(empty($errores)){
 
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
-exit;
 
 //punem '' doar unde avem string unde avem int lasa doar variabila
 //este bine sa comprobam upatu in tableplus

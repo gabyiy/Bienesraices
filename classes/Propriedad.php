@@ -55,6 +55,15 @@ protected static $errores=[];
      }
 
      public function guardar(){
+      //cu ifu asta sepcificam daca exista id actualizam altfel creem
+if(isset($this->id)){
+   $this->actualizar();
+}else{
+   $this->crear();
+}
+     }
+
+public function crear(){
 
 
       //sanitizam datele ,si salvam in atributos ce avem la functia sanitazarAtributos
@@ -77,6 +86,11 @@ $resultado=self::$db->query($query);
 
 return $resultado;
      }
+
+     public function actualizar(){
+      debug("Actualizando");
+   }
+        
 
      //functai aste o sa itereze fiecare atribut si sa il adauge la columna atributos
      public function atributos (){
@@ -110,7 +124,11 @@ return $sanitzando;
 //Urcare de archive , in cazul nostru imaginea
 public function setImagen($imagen){
 //Elimina imaginea anterioARE
-
+if(isset($this->id)){
+   //Comprobam daca exista archivo, si daca exista il elimnam cu ulink pentru al actualiza
+   $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+unlink(CARPETA_IMAGENES . $this->imagen);
+}
    //si aici spunem daca avem o imagine trimisa prin parametru sa o salvam in variabila nostra  imagen din clasa
 
 if ($imagen ){
@@ -190,7 +208,6 @@ public static function find($id){
 $query = "SELECT * FROM  propriedades where id ={$id}" ;
 
 $resultado =self::consultarSQL($query);
-
 //cu array shift spunem ca vrem sa ne arate doar prima pozitie a arraiului
 return array_shift($resultado);
 }
