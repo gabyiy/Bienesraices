@@ -40,7 +40,9 @@
                 <option <?php echo $vendedorId ===$vendedor['id']? 'selected':'' ;?> value="<?php echo "1"; ?>">
                         <?php echo $vendedor['nombre']. " ". $vendedor['apellido'];?>
                 </option>
-            <?php endwhile ; ?>
+            <?php endwhile ;
+           
+            ?>
          
         </select>
        </fieldset>

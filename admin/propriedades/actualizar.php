@@ -69,21 +69,9 @@ if ($_FILES['propriedad']['tmp_name']['imagen']){
 if(empty($errores)){
 
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
-
-//punem '' doar unde avem string unde avem int lasa doar variabila
-//este bine sa comprobam upatu in tableplus
-$query = "UPDATE propriedades SET titulo = '{$titulo}',precio = {$precio},imagen = '{$nombreImagen}',descripcion = '{$descripcion}',
-habitaciones = {$habitaciones}, wc = {$wc},estacionamiento = {$estacionamiento},vendedores_id ={$vendedorId} WHERE id={$id}";
-
-
-$resultado = mysqli_query($db, $query);
+ $propriedad->guardar();
  
 
-if($resultado){
-    //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
-    //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
-    header('Location: /admin?resultado=2');
-}
 }
 }
 ?>

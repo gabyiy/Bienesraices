@@ -88,7 +88,34 @@ return $resultado;
      }
 
      public function actualizar(){
-      debug("Actualizando");
+      $atributos = $this->sanitzarAtributos();
+
+      //dupa ce am sanitizat creem arrayu pentru a uni valorile cu atributele
+
+      $valores=[];
+      //si aici cu foreach trecem peste toate atributele si le adaugam la proprietati de forma automata
+      //actualizandule
+      foreach($atributos as $key =>$value){
+         $valores[]="{$key}='{$value}'";
+      }
+//trebuie lasat mereu un spatiu dupa set inainte de "
+   $query =   "UPDATE propriedades SET " ;
+    $query .= join(', ', $valores);
+//si asa spunem sa ne schimbe unde este id pe care il primim si in acelasi timp il sanitizam
+   $query .=" WHERE id= '" . self::$db->escape_string( $this->id) . "' ";
+
+   //ii mai punem si un limit
+   $query .= " LIMIT 1";
+
+   $resultado= self::$db->query($query);
+
+   
+   
+   if($resultado){
+      //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
+      //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
+      header('Location: /admin?resultado=2');
+  }
    }
         
 
@@ -127,7 +154,9 @@ public function setImagen($imagen){
 if(isset($this->id)){
    //Comprobam daca exista archivo, si daca exista il elimnam cu ulink pentru al actualiza
    $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+   if($existeArchivo){
 unlink(CARPETA_IMAGENES . $this->imagen);
+   }
 }
    //si aici spunem daca avem o imagine trimisa prin parametru sa o salvam in variabila nostra  imagen din clasa
 
