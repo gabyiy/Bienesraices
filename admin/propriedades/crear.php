@@ -99,12 +99,7 @@ $image->save(CARPETA_IMAGENES . $nombreImagen);
 //Salvam imaginea in baza de date
 $resultado=$propriedad->guardar();
 
-//Mesaj de succes sau fail
-if($resultado){
-    //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
-    //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
-    header('Location: /admin?resultado=1');
-}
+
 }
 }
 

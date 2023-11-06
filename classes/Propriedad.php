@@ -51,7 +51,8 @@ protected static $errores=[];
         $this -> estacionamiento= $args["estacionamiento"]??'';
         //facem asta ca sa isi ia data de forma automata
         $this -> creado = date("Y/m/d")??'';
-        $this ->vendedores_id = $args["vendedorId"]??1;
+        $this ->vendedores_id =1;
+      //   $args["vendedorId"]??
      }
 
      public function guardar(){
@@ -61,6 +62,7 @@ if(isset($this->id)){
 }else{
    $this->crear();
 }
+
      }
 
 public function crear(){
@@ -84,8 +86,13 @@ $atributos = $this->sanitzarAtributos();
 //iar asa introducem datele in baza de date
 $resultado=self::$db->query($query);
 
-return $resultado;
-     }
+
+//Mesaj de succes sau fail
+if($resultado){
+   //Daca totu este ok facem un redirect iar dupa ce punem ? putem trimite date care
+   //pot fi citite in locatia unde facem redirect ,iar cu & putem adauga mai multe mesajr
+   header('Location: /admin?resultado=1');
+}     }
 
      public function actualizar(){
       $atributos = $this->sanitzarAtributos();

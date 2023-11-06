@@ -35,14 +35,7 @@
             <option value="">--Selecione--</option>
 
             <!-- Si aici verificam daca am vrun vendedor (practic ii facem un map-->
-            <?php while($vendedor= mysqli_fetch_assoc($resultado) ): ?>
-                <!-- iar mai jos spunem daca venderou id este lafel ca cel din baza de date sa ne adauge selected alftel nimic -->
-                <option <?php echo $vendedorId ===$vendedor['id']? 'selected':'' ;?> value="<?php echo "1"; ?>">
-                        <?php echo $vendedor['nombre']. " ". $vendedor['apellido'];?>
-                </option>
-            <?php endwhile ;
-           
-            ?>
+
          
         </select>
        </fieldset>
