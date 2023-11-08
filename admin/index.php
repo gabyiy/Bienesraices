@@ -39,22 +39,12 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
     $id=filter_var($id,FILTER_VALIDATE_INT);
 
     if ($id){
-        //Eliminam archiva
-        $query =  "SELECT imagen FROM propriedades WHERE id ={$id}";
-        $resultado = mysqli_query($db,$query);
+        $proprieda = Propriedad::find($id);
 
-        $proprieda =mysqli_fetch_assoc($resultado);
+        $proprieda->eliminar();
+    
 
-        unlink("../imagenes/".$proprieda["imagen"]);
-
-        //Eliminam proprietatea
-    $query = "DELETE  from propriedades WHERE id = {$id}";
-    $resultado = mysqli_query($db, $query);
-    if($resultado){
-        //facem un redirect si in acelasi timp setam resultadu la 3 pe care o sa il utilizam
-        //sa comprobam daca este 3 sa ne apara mesaju ca proprietatea a fost stearsa
-        header("Location : /admin?resultado=3");
-    }
+   
 
     }
 }

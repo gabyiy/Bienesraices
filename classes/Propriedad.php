@@ -57,11 +57,13 @@ protected static $errores=[];
 
      public function guardar(){
       //cu ifu asta sepcificam daca exista id actualizam altfel creem
-if(isset($this->id)){
-   $this->actualizar();
-}else{
-   $this->crear();
-}
+      if (($this->id)!="") {
+         //Actualizar
+         $this->actualizar();
+      } else{
+         //Creando un nuevo registro
+         $this->crear();
+      }
 
      }
 
@@ -126,6 +128,20 @@ if($resultado){
    }
         
 
+   //functia asta o folosim sa stergem o prorietate dupa id
+
+   public function eliminar (){
+      $query = "DELETE  from propriedades WHERE id = ".self::$db->escape_string($this->id) . " LIMIT 1";
+      $resultado = self::$db->query($query);
+
+      $this->borrarImagen();
+         if($resultado){
+            //facem un redirect si in acelasi timp setam resultadu la 3 pe care o sa il utilizam
+            //sa comprobam daca este 3 sa ne apara mesaju ca proprietatea a fost stearsa
+            header("Location : /admin?resultado=3");
+        }
+   }
+
      //functai aste o sa itereze fiecare atribut si sa il adauge la columna atributos
      public function atributos (){
 $atributos=[];
@@ -159,11 +175,8 @@ return $sanitzando;
 public function setImagen($imagen){
 //Elimina imaginea anterioARE
 if(isset($this->id)){
-   //Comprobam daca exista archivo, si daca exista il elimnam cu ulink pentru al actualiza
-   $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
-   if($existeArchivo){
-unlink(CARPETA_IMAGENES . $this->imagen);
-   }
+   //pentru a reutiliza codul putem folosi direct functia borar (pt ca are acelasi cod )
+ $this->borrarImagen();
 }
    //si aici spunem daca avem o imagine trimisa prin parametru sa o salvam in variabila nostra  imagen din clasa
 
@@ -172,6 +185,17 @@ if ($imagen ){
    $this->imagen = $imagen;
 }
 
+}
+
+
+//functia pentru a sterge imaginea
+public function borrarImagen(){
+   //Comprobam daca exista archivo, si daca exista il elimnam cu ulink pentru al actualiza
+
+   $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+   if($existeArchivo){
+unlink(CARPETA_IMAGENES . $this->imagen);
+   }
 }
 
 //Validare

@@ -67,7 +67,10 @@ if ($_FILES['propriedad']['tmp_name']['imagen']){
     }
 
 if(empty($errores)){
-
+    //salvam imaginea
+    if(isset($image)) {
+        $image ->save(CARPETA_IMAGENES.$nombreImagen);
+    }
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
  $propriedad->guardar();
  
