@@ -10,12 +10,12 @@ require '../includes/app.php';
  estaAuteticado();
 
 use App\Propriedad;
-
+use App\Vendedor;
 
 //Implementam  o metododa pentru a extrage toate proprietatile utilizand active record
 
+$vendedores = Vendedor::all();
 $propriedades = Propriedad::all();
-
 //scriem queryul
 $query = "SELECT * from propriedades";
 
