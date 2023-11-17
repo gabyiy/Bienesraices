@@ -7,6 +7,7 @@
         <!-- folosim propridad[] ,pentru a adaugam de forma automata datele intrun array -->
         <input type="text" id="titulo" name="propriedad[titulo]" value="<?php
 
+use App\Vendedor;
 
  echo s( $propriedad->titulo); ?>" placeholder="Titulo de la propriedad">
         <label for="precio">Precio</label>    
@@ -30,9 +31,17 @@
         <input type="number" id="estacionamiento" name="propriedad[estacionamiento]"value="<?php echo s($propriedad->estacionamiento); ?>" placeholder="Ex: 1" min="1" max="9">
        </fieldset>
        <fieldset>
-        <legend>Vendedor</legend>
-        <select name="propriedad[vendedorId]" id="">
-            <option value="">--Selecione--</option>
+        <legend for="vendedor">Vendedor</legend>
+        <select name="propriedad[vendedorId]" id="vendedor">
+            <!-- iar asa scoate numele  vendedorului -->
+            <option selected value="">>---Select---<</option>
+            <?php foreach($vendedores as $vendedor){ ?>
+
+                <option <?php echo $propriedad->vendedores_id === $vendedor->id ? "select": ""; ?>
+                
+                value="<?php echo s($vendedor->id); ?>"><?php echo s($vendedor->nombre) . " " . s($vendedor->apellido); ?></option>
+
+        <?php }     ?>
 
             <!-- Si aici verificam daca am vrun vendedor (practic ii facem un map-->
 

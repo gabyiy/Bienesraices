@@ -16,13 +16,9 @@ use App\Vendedor;
 
 $vendedores = Vendedor::all();
 $propriedades = Propriedad::all();
-//scriem queryul
-$query = "SELECT * from propriedades";
-
 
 //scotem datele
 
-$resultadoConsulta = mysqli_query($db,$query);
 
 
 
@@ -38,15 +34,24 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
     //iar aici il transformam in int
     $id=filter_var($id,FILTER_VALIDATE_INT);
 
-    if ($id){
+    //aici facem diferenta de ce primim la post (fie name propriedad sau vendedor ),asa putem sterge
+    //ori proprietatea ori vanzatoru
+
+
+    $tipo = $_POST['tipo'];
+
+    if(validarTipoContenido($tipo)){
+
+    if($tipo=="proprieda"){
         $proprieda = Propriedad::find($id);
 
         $proprieda->eliminar();
-    
-
-   
-
+    }elseif($tipo=="vendedor"){
+        $vendedor= Vendedor::find($id);
+        $vendedor->eliminar();
     }
+
+}
 }
 $inicio=true;
 
@@ -66,7 +71,10 @@ incluirTemplate("header");
         <p class="alerta exito">Ai sters proprietatea corect</p>
 
     <?php endif; ?>
-        <a href="/admin/propriedades/crear.php" class="boton boton-verde">Crear</a>
+        <a href="/admin/propriedades/crear.php" class="boton boton-verde">Nueva Propriedad</a>
+        <a href="/admin/vendedores/crear.php" class="boton boton-amarillo">Nuevo(a) Vendedor</a>
+
+        <h2>Propriedades</h2>
         <table class="propiedades">
         <thead>
             <tr>
@@ -94,24 +102,68 @@ incluirTemplate("header");
                     <!-- aici folosim un input cu id proprietati pe care dorim sa o eliminam
                  folosim type hidden ca sa ne ascunda input si sa nu apara valoarea -->
                 <input type="hidden" name="id" value="<?php  echo $propriedad->id;?>">
+                <input type="hidden" name="tipo" value="proprieda">
+
                     <input type="submit" class="boton-rojo-block" value="Eliminar">
 
             </form>
 
                     <!-- Asa specificam la proprieda vrem sa merge ca sa actualizam trecandui idul -->
-                    <a href="/admin/propriedades//actualizar.php?id=<?php echo $propriedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
+                    <a href="/admin/propriedades/actualizar.php?id=<?php echo $propriedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
         </td>
             </tr>
             <?php endforeach; ?>
 
         </tbody>
         </table>
+        <h2>Vendedores</h2>
+        <table class="propiedades">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Telefono</th>
+                <th>Acciones</th>
+             
+
+        </tr>
+
+        </thead>
+        <!-- Monstram datele care sunt salvate intru obict( de asta folosim foreach)-->
+        <tbody>
+            <?php foreach($vendedores as $vendedor): ?>
+
+            <tr>
+                <td><?php echo $vendedor->id;?></td>
+                <td><?php echo $vendedor->nombre . $vendedor->apellido; ?></td>
+                <td><?php echo $vendedor->telefono; ?></td>
+
+                <td>
+                    <form action="" method="POST" class="w-100">
+
+                    <!-- aici folosim un input cu id proprietati pe care dorim sa o eliminam
+                 folosim type hidden ca sa ne ascunda input si sa nu apara valoarea -->
+                <input type="hidden" name="id" value="<?php  echo $propriedad->id;?>">
+                <input type="hidden" name="tipo" value="vendedor">
+
+                    <input type="submit" class="boton-rojo-block" value="Eliminar">
+
+            </form>
+
+                    <!-- Asa specificam la proprieda vrem sa merge ca sa actualizam trecandui idul -->
+                    <a href="/admin/vendedores/actualizar.php?id=<?php echo $propriedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
+        </td>
+            </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+        </table>
+
     </main>
 
     
     <?php
 
-    // Inchidem conexiunea
-    mysqli_close($db);
+
 incluirTemplate("footer");
 ?>

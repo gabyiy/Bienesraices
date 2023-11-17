@@ -6,6 +6,7 @@ require "../../includes/app.php";
 
 //acum avand acces la app.php putem utiliza si clasa app
 use App\Propriedad;
+use App\Vendedor;
 
 //intervention o folosim ca sa adaugam imagini
 use Intervention\Image\ImageManagerStatic as Image;
@@ -14,15 +15,12 @@ use Intervention\Image\ImageManagerStatic as Image;
  estaAuteticado();
 
 
- $db = conectarDB();
 
  $propriedad = new Propriedad();
 
-//Consultam sa vedem ce vanzatori avem
 
-$consulta = "SELECT * FROM  vendedores";
-
-$resultado = mysqli_query($db,$consulta);
+ //Consulta pentru a obtine toti vanzatory 
+$vendedores = Vendedor::all();
 
 
 // $delquery= "DELETE  FROM propriedades";

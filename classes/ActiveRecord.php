@@ -6,7 +6,7 @@ class ActiveRecord {
     //Variabila bazei de date care o facem protected ca sa fie accesibila doar din clasa, si static ca sa fie instantiat doar odata
    protected static $db;
    //creem alta variabila protected care o sa o folosim pentru sanitzare si il facem un array pentru a putea fi iterat
-protected static $columnasDB=static::$columnasDB;
+protected static $columnasDB=[];
 
 
 //folosim table asta pentru a putea trimite date din din propriedades si vendedores (facando dinamica)
@@ -29,23 +29,7 @@ protected static $errores=[];
 
      //si aici facem functia contruuctor pe care o vom utiliza pentru a acessa datele
      //punem args  care o sa fie un array
-     public function __construct($args =[])
-     {
-        //si asa adaugam datele in constrcutor, si in caz ca nu avem date poate fi un string gol
-        //cand aveam functi publice folosim this
-        $this -> id = $$args["id"]??'';
-        $this-> titulo = $args["titulo"]??'';
-        $this-> precio = $args["precio"]??'';
-        $this -> imagen = $args["imagen"]??'';
-        $this -> descripcion = $args["descripcion"]??'';
-        $this -> habitaciones= $args["habitaciones"]??'';
-        $this -> wc = $args["wc"]??'';
-        $this -> estacionamiento= $args["estacionamiento"]??'';
-        //facem asta ca sa isi ia data de forma automata
-        $this -> creado = date("Y/m/d")??'';
-        $this ->vendedores_id =1;
-      //   $args["vendedorId"]??
-     }
+    
 
      public function guardar(){
       //cu ifu asta sepcificam daca exista id actualizam altfel creem
@@ -138,8 +122,9 @@ if($resultado){
      //functai aste o sa itereze fiecare atribut si sa il adauge la columna atributos
      public function atributos (){
 $atributos=[];
-
-foreach(self::$columnasDB as $columna){
+//folosim iar static ca sa extragem datele primite de la celelate clase (propriedad sau vendedor)
+//si nu folosim self care ar folosi datele doar de clasa activeRecords
+foreach(static::$columnasDB as $columna){
    //spunem sa treaca peste atributo id cand itereaza
    if ($columna==="id"){
       continue;
@@ -195,48 +180,16 @@ unlink(CARPETA_IMAGENES . $this->imagen);
 
 public static function getErrores(){
 
-   return self::$errores;
+   return static::$errores;
 }
 
 //folosim this pentru a accesa variabilele din clasa , iar cu self accesam variabila protected errors
 public function validar(){
 
-   if(!$this->titulo){
-      self::$errores[]= "Trebuie sa adaugi un titlu";
-      
-      }
-      
-      if(!$this->precio){
-          self::$errores[]= "Trebuie sa adaugi un pret";
-      
-          }
-          if(strlen( $this->descripcion)<40){
-              self::$errores[]= "Trebuie sa adaugi o descriptie si trebuie sa fie mai mare de 50 caractere";
-          
-              }
-      
-          if(!$this->habitaciones){
-              self::$errores[]= "Trebuie sa adaugi un numar de camere";
-          
-              }
-              if(!$this->wc){
-                  self::$errores[]= "Trebuie sa adaugi un numar de toalete";
-              
-                  }
-                  if(!$this->estacionamiento){
-                      self::$errores[]= "Trebuie sa adaugi un numar de parcari";
-                  
-                      }
-                      if(!$this->vendedores_id){
-                          self::$errores[]= "Trebuie sa adauginumele vanzatorului";
-                      
-                          }
-      //asa verificam daca itroducem o imagine(cu var_dump($_FILE) aflam daca are un nume in arrayul imagini)
-      //punem imagen error pt ca in caza ca depasete 2 mega mysql o sa ne dea errore
-      if (!$this->imagen){
-      self::$errores[]="Trebuie introdusa o imagine";
-      }
-      return self::$errores;
+   //creem un array gol errores pentru ca in caz ca avem alte errori sa le genereze
+   static::$errores=[];
+
+      return static::$errores;
 }
 
 //Listeaza toate proprietatilie
@@ -277,7 +230,7 @@ $array=[];
 
 while ($registro = $resultado->fetch_assoc()){
    
-   $array[]=self::crearObjeto($registro);
+   $array[]=static::crearObjeto($registro);
 }
 
    //Eliberam memoria
@@ -291,7 +244,7 @@ $resultado->free();
 
 protected static function crearObjeto ($registro){
 
-   $objeto = new self;
+   $objeto = new static;
 
 
    foreach($registro as $key =>$value){

@@ -57,3 +57,11 @@ function s ($html):string{
 $s =htmlspecialchars($html);
 return $s;
 }
+
+//validar tipo de contenido
+
+function validarTipoContenido ($tipo){
+$tipos = ["vendedor","proprieda"];
+//asa specicam ce sa caute si unde sa caute
+return in_array($tipo,$tipos);
+}

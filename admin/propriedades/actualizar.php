@@ -1,6 +1,7 @@
 <?php
 
 use App\Propriedad;
+use App\Vendedor;
 use Intervention\Image\ImageManagerStatic as Image;
 
 require "../../includes/app.php";
@@ -24,16 +25,9 @@ header("Location: /admin");
 //Instatiem clasa PRoprieda cu functia statica
 $propriedad = Propriedad::find($id);
 
+//consulta ca sa gasim toti vanzatori
 
-//asa putem vedea ce ce rezultat avem la proprietati
-// echo "<pre>";
-// var_dump($propriedad);
-// echo "</pre>";
-
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db,$consulta);
-
-$inicio=true;
+$vendedores = Vendedor::all();
 
 incluirTemplate("header");
 $errores=Propriedad::getErrores();
@@ -68,8 +62,9 @@ if ($_FILES['propriedad']['tmp_name']['imagen']){
 
 if(empty($errores)){
     //salvam imaginea
-    if(isset($image)) {
-        $image ->save(CARPETA_IMAGENES.$nombreImagen);
+    if ($_FILES['propriedad']['tmp_name']['imagen']){
+
+        $image ->save(CARPETA_IMAGENES . $nombreImagen);
     }
 //folosim exit cand vrem sa oprim fluxu de informati in php(sa verificam datele introdude de ex cu var_dump)
  $propriedad->guardar();

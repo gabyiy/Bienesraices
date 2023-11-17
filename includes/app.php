@@ -12,8 +12,8 @@ require __DIR__ . "/../vendor/autoload.php";
 $db =conectarDB();
 
 $db = conectarDB();
-use App\Propriedad;
+use App\ActiveRecord;
 
 
 //Fiind o functie statica nu trebuie instantiata, iar dupa ii trecem ca parametru conexiunea
-Propriedad::setDB($db);
+ActiveRecord::setDB($db);
